@@ -1,3 +1,5 @@
+# Brute Force blog
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/Exponential-Brute-Force/bruteforce.github.io/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
