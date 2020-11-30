@@ -25,10 +25,10 @@ Let us consider a scenario where top medical institutions have just learned abou
 
 Thus, the real problem lies in agglomerating all the information in a central location where the model will train. This brings us to the notion of federated learning! With federated learning, we can now take the model to the data instead of bringing the data to the model. 
 
-- 1. A centralized server maintains the global deep neural network model. 
-- 2. Each participating institution trains their own copy of the model using their respective datasets. 
-- 3. The central server then receives the updated model from each participant and aggregates the contributions.
-- 4. The model’s updated parameters are shared with the participants once again, as they continue their local training. 
+- A centralized server maintains the global deep neural network model. 
+- Each participating institution trains their own copy of the model using their respective datasets. 
+- The central server then receives the updated model from each participant and aggregates the contributions.
+- The model’s updated parameters are shared with the participants once again, as they continue their local training. 
 
 
 This agreement of letting developers train the segmentation model on data they cannot have access to is the framework we have built and termed as FedSegment. 
