@@ -43,4 +43,13 @@ We simulate a federated learning architecture on image segmentation by adapting 
 The server sends initial weights of the model to all the clients in the beginning. The clients start training on their own subset of data and send weights to the server. The server gathers the weights from all the clients and performs aggregation on the weights. The aggregated weights are sent back to the clients and the training continues. This entire loop is called one round. Many such rounds are simulated in order to achieve a decent accuracy. 
 
 
+### Implementation
+
+![Image](pictures/pic2.png)
+
+
+
+
+
+
 
