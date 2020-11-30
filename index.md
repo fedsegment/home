@@ -2,7 +2,7 @@
 
 ## **A Federated Learning Framework for Image Segmentation**
 
-### **Our project is in collaboration with FedML, a research library and benchmark for federated machine learning, developed at USC. Our module will be an open source contribution to FedML. **
+### Our project is in collaboration with FedML, a research library and benchmark for federated machine learning, developed at USC. Our module will be an open source contribution to FedML. 
 
 *****
 
@@ -49,12 +49,17 @@ The server sends initial weights of the model to all the clients in the beginnin
 
 
 
+### Experiments
+
+### Results
+
+### Challenges
 
 ### Future Work
 
 There are two things that we can work on:
  - Improving accuracy of the model - In addition to hyper parameter tuning, we can further try to improve on accuracy by experimenting with other aggregation methods e.g, FedMA instead of FedAvg. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful
- 
+
 - Integrating other popular segmentation models - We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet which have pretrained models resulting in SOTA accuracy. Currently, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
 
 
