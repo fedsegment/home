@@ -4,7 +4,7 @@
 
 ### Our project is in collaboration with FedML, a research library and benchmark for federated machine learning, developed at USC. Our module will be an open source contribution to FedML. 
 
-
+*****
 
 ![Image](pictures/anim1.gif)
 
