@@ -21,7 +21,7 @@ Maybe, yes.
 
 Let us consider a scenario where top medical institutions have just learned about the novel coronavirus and intend to diagnose the illness using the chest X-ray images of symptomatic patients. Using these images, a segmentation model could be developed in order to facilitate early diagnosis. Unfortunately, this approach is not as straightforward as it sounds. We would inevitably encounter some significant bottlenecks while training the segmentation model. The most noteworthy concern would be data insufficiency due to privacy concerns where hospitals are unwilling to share sensitive patient records, besides lack of adequate computing resources. 
 
-![Image](pictures/pic1.png)
+![Image](pictures/pic1.png, "chest X-ray image segmentation")
 
 Thus, the real problem lies in agglomerating all the information in a central location where the model will train. This brings us to the notion of federated learning! With federated learning, we can now take the model to the data instead of bringing the data to the model. 
 
@@ -38,14 +38,14 @@ This agreement of letting developers train the segmentation model on data they c
 
 We simulate a federated learning architecture on image segmentation by adapting and training DeepLabV3+, a state-of-the-art model for image segmentation, by incorporating the Resnet network as the backbone for extracting feature maps. We develop a data loader for the PASCAL VOC dataset which supports non-I.I.D. distribution to represent real-world, distributed data that naturally tends to be non-I.I.D. Assuming we have virtual clients and a centralized server, the data loader partitions training image dataset in the non-I.I.D format. 
 
-![Image](pictures/anim2.gif)
+![Image](pictures/anim2.gif, "FedSegment - our approach")
 
 The server sends initial weights of the model to all the clients in the beginning. The clients start training on their own subset of data and send weights to the server. The server gathers the weights from all the clients and performs aggregation on the weights. The aggregated weights are sent back to the clients and the training continues. This entire loop is called one round. Many such rounds are simulated in order to achieve a decent accuracy. 
 
 
 ### Implementation
 
-![Image](pictures/pic2.png)
+![Image](pictures/pic2.png, "Deeplabv3+ architecture")
 
 We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. Deeplabv3+ is the recent image segmentation model which uses Atrous Spatial Pyramid Pooling(ASPP) for encoding multi-scale contextual information as well as an encoder-decoder architecture to recover location/spatial information. 
 
@@ -57,6 +57,7 @@ Using the open source FedML framework on the PASCAL VOC dataset with 10582 augme
 ### Results
 
 ![Image](pictures/deepLab_resnet_pascal_c4b10_l007_e2r200_saver.png)
+
 ### Challenges
 
 ### Future Work
