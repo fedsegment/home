@@ -46,7 +46,6 @@ The server sends initial weights of the model to all the clients in the beginnin
 ### Implementation
 
 ![Image](pictures/pic2.png, "Deeplabv3+ architecture")
-<!-- {% include image.html url="pictures/pic2.png" description="Deeplabv3+ architecture" %} -->
 
 
 We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. Deeplabv3+ is the recent image segmentation model which uses Atrous Spatial Pyramid Pooling(ASPP) for encoding multi-scale contextual information as well as an encoder-decoder architecture to recover location/spatial information. 
