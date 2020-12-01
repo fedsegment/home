@@ -48,14 +48,19 @@ The server sends initial weights of the model to all the clients in the beginnin
 
 We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. DeepLabv3+, extends DeepLabv3 by adding a simple yet effective decoder module to refine the segmentation results especially along object boundaries. It uses the Resnet model as a backbone and applies the depthwise separable convolution to both Atrous Spatial Pyramid Pooling and decoder modules, resulting in a faster and stronger encoder-decoder network.
 
-We build a segmentation model on top of the open source FedML framework by training the Deeplabv3+ - Resnet 101 model on the PASCAL VOC dataset comprising 10582 augmented training images and 2857 validation images. The centralized training of Deeplabv3+ in the research paper is our reference baseline model which gives a mean Intersection-over-Union (mIoU) of 78.85%. We have achieved an mIoU of 75.57% in the federated setting. Assuming we have 4 virtual clients, we use 4 GPUs where we assign each client one GPU. By conducting several experiments, we have determined the following values for the training parameters to achieve good results: Batch Size: 10, output stride: 16, learning rate: 0.007, optimizer: SGD. We train the model for 60 rounds with 2 epochs per round. We have also enabled a functionality to save checkpoints of the best validation prediction of mIoU by implementing a saver module.  
+We build a segmentation model on top of the open source FedML framework by training the Deeplabv3+ - Resnet 101 model on the PASCAL VOC dataset comprising 10582 augmented training images and 2857 validation images. The centralized training of Deeplabv3+ in the research paper is our reference baseline model which gives a mean Intersection-over-Union (mIoU) of 78.85%. We have achieved an mIoU of 75.57% in the federated setting. Assuming we have 4 virtual clients, we use 4 GPUs where we assign each client one GPU. By conducting several experiments, we have determined the following values for the training parameters to achieve good results: Batch Size: 10, output stride: 16, learning rate: 0.007, optimizer: SGD. We train the model for 60 rounds with 2 epochs per round. We have also enabled a functionality to save checkpoints of the best validation prediction of mIoU by implementing a saver module.    
 
 
 ### Experiments
 
+We adapt the ImageNet-pretrained backbone to the semantic segmentation by applying atrous convolution to extract dense features. For extracting feature maps, we experimented with two backbones; Aligned-Xception and ResNet-101. We trained our models with Xception backbone for 10 rounds and got a mIoU ~10% on validation dataset, however with ResNet Backbone for the same number of rounds, we reported validation mIoU ~60%. Even though Xception backbone is believed to be giving better results with faster computation as per [3], that didn’t turn out to be true during our experimentation. After double checking our implementation, we figured out that the problem was with the pretrained weights we were using. For the implementation we followed which is a slight modification of Xception backbone called Aligned Xception [5], the pretrained weights we had were not fully trained. And we could not find fully pretrained weights for the exact implementation. Hence we decided to stick with ResNet Backbone for which we had fully pretrained weights already available.
+
+In addition to experimenting with different backbones, we also experimented with different output stride. The output stride is defined as the ratio of input image spatial resolution to final output resolution.
+
+
 ### Results
 
-![Image](pictures/deepLab_resnet_pascal_c4b10_l007_e2r200_saver.png)
+![Image](pictures/finl_graphs.png)
 
 | mIoU | fwIoU | Test accuracy | Test class accuracy | Loss |
 |-------|--------|---------|-------|--------|
