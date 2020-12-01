@@ -45,11 +45,6 @@ The server sends initial weights of the model to all the clients in the beginnin
 <!-- ![Image](pictures/pic2.png) -->
 {% include image.html url="pictures/pic2.png" description="Architecture of Deeplabv3+" %}{: id="pic2"}
 
-| [![ImageD](pictures/pic2.png)](http://videoblocks.com)  | 
-  [![ImageB](pictures/pic5.png)](http://audioblocks.com) 
-|:---:|:---:|
-| Deeplabv3+ | ResNet-101 |
-
 We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. Deeplabv3+ is the recent image segmentation model which uses Atrous Spatial Pyramid Pooling(ASPP) for encoding multi-scale contextual information as well as an encoder-decoder architecture to recover location/spatial information. 
 
 Using the open source FedML framework on the PASCAL VOC dataset with 10582 augmented training images and 2857 validation images, we train the Deeplabv3+ - Resnet 101 model. The centralized training of Deeplabv3+ in the paper is our reference baseline model which gives an mIoU of 78%. We have achieved an mIoU of 75% in the federated setting. Assuming we have 4 virtual clients, we use 4 GPUs where we assign each client one GPU. The training parameters are as follows - batch size = 10, output stride = 16, learning rate  = 0.007, SGD optimizer. We run 200 rounds with 2 epochs per round.  A saver is implemented to save checkpoints of the best validation prediction of mIoU.
