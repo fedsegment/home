@@ -1,4 +1,4 @@
-![Image](pictures/anim1.gif)[anim1]
+![Image](pictures/anim1.gif){: id="anim1"}
 
 ### Overview
 
