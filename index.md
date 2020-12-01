@@ -63,6 +63,10 @@ Using the open source FedML framework on the PASCAL VOC dataset with 10582 augme
 
 ![Image](pictures/deepLab_resnet_pascal_c4b10_l007_e2r200_saver.png)
 
+{% include interactive.html %}
+
+
+
 ### Challenges
 
 ### Future Work
