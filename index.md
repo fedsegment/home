@@ -1,4 +1,4 @@
-![Image](pictures/anim1.gif)
+![Image](pictures/anim1.gif)[anim1]
 
 ### Overview
 
