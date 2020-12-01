@@ -6,8 +6,9 @@
 
 *****
 
-![Image](pictures/anim1.gif)
+<!-- ![Image](pictures/anim1.gif) -->
 
+{% include image.html url="pictures/anim1.gif" description="Bird" %}
 
 ### Overview
 
