@@ -58,9 +58,9 @@ We build a segmentation model on top of the open source FedML framework by train
 
 | mIoU | fwIoU | Test accuracy | Test class accuracy | Loss |
 |-------|--------|---------|-------|--------|
-| ambrosia | gala | red delicious |       |          |
-| pink lady | jazz | macintosh |          |            |
-| honeycrisp | granny smith | fuji |       |         |
+| ambrosia | gala | red delicious |     |      |
+| pink lady | jazz | macintosh |      |      |
+| honeycrisp | granny smith | fuji |     |     |
 
 ### Challenges
 
