@@ -73,6 +73,11 @@ There are two things that we can work on:
 
 ### Resources
 
+1. https://fedml.ai/
+2. https://arxiv.org/abs/2007.13518
+3. https://arxiv.org/pdf/1802.02611.pdf
+4. https://wandb.ai/elliebababa/fedml/runs/5ykbr3ul
+5. https://github.com/jfzhang95/pytorch-deeplab-xception
 
 
 
