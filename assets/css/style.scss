@@ -1,10 +1,11 @@
 @import "{{ site.theme }}";
-.main-content {
+.main-content 
+{
     h1 {
      color: #ff0000;
      text-align: center;
    }
-  }
+}
 
 .page-header{
   color:#ffff;
