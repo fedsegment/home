@@ -1,5 +1,4 @@
-![Image](pictures/anim1.gif){: id="anim1"}
-
+<!-- ![Image](pictures/anim1.gif){: id="anim1"} -->
 ### Overview
 
 Image segmentation is a commonly used technique to partition an image and generate pixel-wise masks for each instance. There are several interesting use cases for segmentation, ranging from medical data analysis to content-based image retrieval. 
