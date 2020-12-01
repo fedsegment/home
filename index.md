@@ -29,7 +29,9 @@ This agreement of letting developers train the segmentation model on data they c
 
 ### Approach
 
-We simulate a federated learning architecture on image segmentation by adapting and training DeepLabV3+, a state-of-the-art model for image segmentation, by incorporating the Resnet network as the backbone for extracting feature maps. We develop a data loader for the PASCAL VOC dataset which supports non-I.I.D. distribution to represent real-world, distributed data that naturally tends to be non-I.I.D. Assuming we have virtual clients and a centralized server, the data loader partitions training image dataset in the non-I.I.D format. 
+We simulate a federated learning architecture by adapting and training DeepLabV3+, a state-of-the-art model for image segmentation, and incorporating ResNet as the backbone for extracting feature maps. We develop a data loader for the PASCAL VOC dataset which supports partitioning of the data between our virtual clients in a non-I.I.D fashion using Dirichlet, to represent real-world, scattered data. 
+
+The Dirichlet distribution is a density over a K dimensional vector p whose K components are positive and sum to 1. Dirichlet can support the probabilities of a K-way categorical event. In Federated Learning, we find that the K clients' sample numbers obey the Dirichlet distribution. This Latent Dirichlet Allocation (LDA) method was first proposed by Measuring the Effects of Non-Identical Data Distribution for Federated Visual Classification. This can generate nonIIDness with an unbalanced sample number in each label.
 
 <!-- ![Image](pictures/anim2.gif) -->
 {% include image.html url="pictures/anim2.gif" description="Animation of FedSegment" %}{: id="anim2"}
@@ -43,6 +45,10 @@ The server sends initial weights of the model to all the clients in the beginnin
 <!-- ![Image](pictures/pic2.png) -->
 {% include image.html url="pictures/pic2.png" description="Architecture of Deeplabv3+" %}{: id="pic2"}
 
+| [![ImageD](pictures/pic2.png)](http://videoblocks.com)  | 
+  [![ImageB](pictures/pic5.png)](http://audioblocks.com) 
+|:---:|:---:|
+| Deeplabv3+ | ResNet-101 |
 
 We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. Deeplabv3+ is the recent image segmentation model which uses Atrous Spatial Pyramid Pooling(ASPP) for encoding multi-scale contextual information as well as an encoder-decoder architecture to recover location/spatial information. 
 
