@@ -55,9 +55,11 @@ Using the open source FedML framework on the PASCAL VOC dataset with 10582 augme
 
 ![Image](pictures/deepLab_resnet_pascal_c4b10_l007_e2r200_saver.png)
 
-{% include interactive.html %}
-
-
+| Priority apples | Second priority | Third priority |
+|-------|--------|---------|
+| ambrosia | gala | red delicious |
+| pink lady | jazz | macintosh |
+| honeycrisp | granny smith | fuji |
 
 ### Challenges
 
