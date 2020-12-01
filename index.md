@@ -45,9 +45,9 @@ The server sends initial weights of the model to all the clients in the beginnin
 <!-- ![Image](pictures/pic2.png) -->
 {% include image.html url="pictures/pic2.png" description="Architecture of Deeplabv3+" %}{: id="pic2"}
 
-We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. Deeplabv3+ is the recent image segmentation model which uses Atrous Spatial Pyramid Pooling(ASPP) for encoding multi-scale contextual information as well as an encoder-decoder architecture to recover location/spatial information. 
+We perform image segmentation by training the Deeplabv3+ model with ResNet-101 as backbone for feature maps extraction. DeepLabv3+, extends DeepLabv3 [2] by adding a simple yet effective decoder module to refine the segmentation results especially along object boundaries. It uses the Resnet model as a backbone and applies the depthwise separable convolution to both Atrous Spatial Pyramid Pooling and decoder modules, resulting in a faster and stronger encoder-decoder network.
 
-Using the open source FedML framework on the PASCAL VOC dataset with 10582 augmented training images and 2857 validation images, we train the Deeplabv3+ - Resnet 101 model. The centralized training of Deeplabv3+ in the paper is our reference baseline model which gives an mIoU of 78%. We have achieved an mIoU of 75% in the federated setting. Assuming we have 4 virtual clients, we use 4 GPUs where we assign each client one GPU. The training parameters are as follows - batch size = 10, output stride = 16, learning rate  = 0.007, SGD optimizer. We run 200 rounds with 2 epochs per round.  A saver is implemented to save checkpoints of the best validation prediction of mIoU.
+We build a segmentation model on top of the open source FedML framework by training the Deeplabv3+ - Resnet 101 model on the PASCAL VOC dataset comprising 10582 augmented training images and 2857 validation images. The centralized training of Deeplabv3+ in the research paper is our reference baseline model which gives a mean Intersection-over-Union (mIoU) of 78.85%. We have achieved an mIoU of 75.57% in the federated setting. Assuming we have 4 virtual clients, we use 4 GPUs where we assign each client one GPU. By conducting several experiments, we have determined the following values for the training parameters to achieve good results: Batch Size: 10, output stride: 16, learning rate: 0.007, optimizer: SGD. We train the model for 60 rounds with 2 epochs per round. We have also enabled a functionality to save checkpoints of the best validation prediction of mIoU by implementing a saver module.  
 
 
 ### Experiments
@@ -56,7 +56,7 @@ Using the open source FedML framework on the PASCAL VOC dataset with 10582 augme
 
 ![Image](pictures/deepLab_resnet_pascal_c4b10_l007_e2r200_saver.png)
 
-| mIoU | fwIoU | Testing accuracy | Testing class accuracy | Loss |
+| mIoU | fwIoU | Test accuracy | Test class accuracy | Loss |
 |-------|--------|---------|-------|--------|
 | ambrosia | gala | red delicious |       |          |
 | pink lady | jazz | macintosh |          |            |
