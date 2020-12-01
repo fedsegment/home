@@ -37,11 +37,15 @@
           developed at USC. Our module will be an open source contribution to FedML.</h3>
     </header>
 
+
+
     <main id="content" class="main-content" role="main">
       {{ content }}
 
-      
-        
+      <div>
+            <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+            <script type="text/javascript", src="../js/graph.js"></script>
+      </div>
       <footer class="site-footer">
         {% if site.github.is_project_page %}
           <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.</span>
