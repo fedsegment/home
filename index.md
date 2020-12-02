@@ -118,4 +118,6 @@ We also intend to explore and incorporate alternate backbones to train the DeepL
 3. [Encoder-Decoder with Atrous SeparableConvolution for Semantic Image Segmentation, Liang-Chieh Chen et. al](https://arxiv.org/pdf/1802.02611.pdf)
 4. [Logs of our experiment (wandb)](https://wandb.ai/elliebababa/fedml/runs/5ykbr3ul)
 5. [Pytorch Deeplab Xception](https://github.com/jfzhang95/pytorch-deeplab-xception)
+6. [Measuring the Effects of Non-Identical DataDistribution for Federated Visual Classification, Tzu-Ming Harry Hsu et. al](https://arxiv.org/pdf/1909.06335.pdf)
+7. [Chest X-ray image segmentation picture](https://towardsdatascience.com/can-machine-learning-read-chest-x-rays-like-radiologists-part-2-aa77dba219f0)
 
