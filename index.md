@@ -56,27 +56,41 @@ We adapt the ImageNet-pretrained backbone to the semantic segmentation by applyi
 
 In addition to experimenting with two different backbones, we also experimented with different output strides. The output stride is defined as the ratio of input image spatial resolution to final output resolution. For the task of semantic segmentation, one can adopt output stride = 16 (or 8) for denser feature extraction. Theoretically, lowering the output stride improves the performance marginally, however it adds a lot of extra computational complexity and hence using output stride = 16 strikes the best trade-off between speed and accuracy. With the limited resources we had, we could not only train our models upto round 15 for output stride = 8 as reported in the table below. 
 
+| Backbone | Batch Size | Epochs | Rounds | Learning Rate | Testing Accuracy | Testing Loss | mIoU | fWIoU |
+|---|---|---|---|---|---|---|---|---|
+| ResNet-101 | 6 | 2 | 15 | 0.007 | 0.899 | 0.0083 | 0.655 | 0.828 | 
+| ResNet-101 | 10 | 2 | 60 | 0.007 | 0.924 | 0.0024 | 0.755 | 0.863 | 
+| Xception | 6 | 2 | 60 | 0.007 | 0.6445 | 0.0195 | 0.048 | 0.419 | 
+
 
 ### Results
 
-![Image](pictures/finl_graphs.png)
+As shown in the table above the model architecture which gave us the best results was with output_stride = 16, batch_size = 10 with a learning rate of 0.007 while fine-tuning the backbone and 0.07 for all the remaining layers. We trained the model only until 60 rounds as the model reaches saturation stage and the validation accuracy does not improve post that. At each round, the model was trained for 2 epochs locally by all four clients. The results for the best performing federated architecture for our model are as shown in the graph below.
 
-| mIoU | fwIoU | Test accuracy | Test class accuracy | Loss |
-|-------|--------|---------|-------|--------|
-| ambrosia | gala | red delicious |     |      |
-| pink lady | jazz | macintosh |      |      |
-| honeycrisp | granny smith | fuji |     |     |
+<!-- ![Image](pictures/finl_graphs.png) -->
+{% include image.html url="pictures/finl_graphs.png" description="Final Graphs" %}{: id="final-graphs"}
+
+{% include image.html url="pictures/final_inference_visualization.png" description="Final Visualization" %}{: id="final-visualization"}
 
 ### Challenges
+
+We identify three major challenges for using the above mentioned segmentation method in a real world setting:
+    
+1. Computational Complexity:
+Since image segmentation is a computationally expensive task, hence edge devices with resource constraint will always face challenges for our method. There are few ways to reduce the computational complexity for e.g reducing the complexity of training by freezing the backbone or keeping a higher output_stride but all of that will come at the cost of losing some accuracy. So, there is again a tradeoff to make between accuracy and computational complexity.
+2. Statistical Heterogeneity:
+Since devices frequently generate and collect data in a non-identically distributed manner across the network, hence the number of data points across edge devices may vary significantly and this data generation paradigm violates frequently-used independent and identically distributed (I.I.D) assumptions in distributed optimization. To mitigate this problem, the recommended approach is to simulate the non-IID setting as closely as possible while training the model so the model learns to generalize and adapts to this nature of data generation.
+3. Privacy Concerns:
+Even though the entire concept of federated learning is to protect the privacy of data, privacy is still a major concern in federated learning applications including image segmentation. Even though federated learning makes a step towards protecting data generated on each device by sharing model updates, e.g, gradient information, instead of raw data. However, communicating model updates throughout the training process can still reveal sensitive information either to a third-party or to the central server. From the shift in gradient at each state, there are some statistical ways to infer a good amount of information about the data points that are supposed to be private. While recent methods aim to enhance the privacy of federated learning using tools such as multipart computation or differential privacy, these approaches often provide privacy at the cost of reduced model performance or system efficiency. Hence there is a need to understand and balance these tradeoffs while using a federated segmentation approach.
+
 
 ### Future Work
 
 There are two things that we intend to work on:
 1. Improving accuracy of the model - 
-In addition to hyper parameter tuning, we plan to work on improving the model accuracy by experimenting with other aggregation methods e.g, FedMA instead of FedAvg. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful
+In addition to hyper parameter tuning, we plan to work on improving the model accuracy by experimenting with lesser output strides. As mentioned above, the reduction of output strides comes at a huge cost of computational complexity. To keep the computational complexity in check, we can freeze the backbone and try experimenting with output stride of 8 or 4. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful. Lastly, pre-training the model on Coco Dataset and fine-tuning it on Pascal can give better results because Pascal has a small dataset which further gets splitted into n number of clients and so there is a good chance for model to overfit when data is splitted amongst more number of clients.
 2. Integrating other popular segmentation models - 
-We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet, etc., which have pretrained models resulting in a state of the art accuracy. Currently, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
-
+We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet, etc., which have pretrained models resulting in a state of the art accuracy. We already tried employing the Xception Backbone but the results weren’t impressive because of the reasons mentioned earlier. However, with a fully trained Xception, we expect to get similar or better results than Resnet Backbone that we currently have. Moreover, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
 
 ### Resources
 
