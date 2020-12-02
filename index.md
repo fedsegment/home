@@ -1,5 +1,5 @@
 <!-- ![Image](pictures/anim1.gif){: id="anim1"} -->
-### Overview
+## Overview
 
 Image segmentation is a commonly used technique to partition an image and generate pixel-wise masks for each instance. There are several interesting use cases for segmentation, ranging from medical data analysis to content-based image retrieval. 
 
@@ -30,17 +30,21 @@ This agreement of letting developers train the segmentation model on data they c
 
 *****
 
-### Approach
+## Approach
 
 We simulate a federated learning architecture by adapting and training DeepLabV3+, a state-of-the-art model for image segmentation, and incorporating ResNet as the backbone for extracting feature maps. We develop a data loader for the PASCAL VOC dataset which supports partitioning of the data between our virtual clients in a non-I.I.D manner using Dirichlet, to represent real-world, scattered data. 
 
 The Dirichlet distribution, parameterized by the concentration parameter 𝛼, is a density over a K dimensional vector whose K components are positive and sum up to 1. Dirichlet can support the probabilities of a K-way categorical event. In Federated Learning, we find that the K clients' sample numbers obey the Dirichlet distribution. This Latent Dirichlet Allocation (LDA) method was first proposed by Measuring the Effects of Non-Identical Data Distribution for Federated Visual Classification. This can generate non-IIDness with an unbalanced sample number in each label. The figure below illustrates populations drawn for 4 clients from the Dirichlet distribution of the Pascal VOC dataset with 21 classes for different values of 𝛼.
 
+
 {% include image.html url="pictures/nonIIDGraphComparison.png" description="Non I.I.D comparison with different alpha values (we use alpha=0.5 to achieve good a non-I.I.D distribution)" %}{: id="niid"}
+
 
 We have 5 worker threads out of which 4 are client-threads managed by their Client Managers and a server thread managed by a Server Manager. Client Managers execute the training process in the order that they receive weights from the Server Manager. In the first round, the Server Manager initializes the model and sends the weights to the Client Manager for each client. The Client Manager then sets up the client worker threads on their respective GPUs for training. Since we are training our architecture on 4 GPUs, each client is assigned one GPU. After completing the specified number of epochs, The Client Managers then send the trained weights to the Server Manager. The Server Manager instantiates the server thread to perform aggregation on model weights received from all the clients by scaling the weights with respect to the size of their local dataset. It then updates the model parameters, performs evaluation on the validation set and sends back the updated model weights to the Client Managers. The next round begins and the process continues for a given number of rounds. We employ the MPI communication protocol for the interactions between the server and its clients.
 
-### Implementation
+*****
+
+## Implementation
 
 <!-- ![Image](pictures/pic2.png) -->
 {% include image.html url="pictures/pic2.png" description="Architecture of Deeplabv3+" %}{: id="pic2"}
@@ -51,7 +55,7 @@ We build a segmentation model on top of the open source FedML framework by train
 
 *****
 
-### Experiments
+## Experiments
 
 We adapt the ImageNet-pretrained backbone to semantic segmentation by applying atrous convolution to extract dense features. We experimented with two backbones: Aligned-Xception and ResNet-101. Motivated by the recent success of depthwise separable convolution, we initially explored our experimentation by adapting Xception backbone [2] for extracting feature maps, and obtained an mIoU of ~10% on the validation dataset after 10 rounds. However the numbers surged when we plugged in the widely used ResNet Backbone. For an equivalent number of rounds, we reported a validation mIoU of ~60%. Even though the Xception backbone is believed to give better results with faster computation[2], our experimentation proved otherwise in this case. After further scrutiny, we figured that the discrepancy was mainly because of the pretrained weights being used. The initial implementation which consisted of a slight modification of Xception backbone called Aligned Xception [5] did not utilize fully pretrained weights, which resulted in poorer metrics. Hence we decided to move forward with the ResNet Backbone for which fully pretrained weights were readily available.
 
@@ -66,7 +70,7 @@ In addition to experimenting with two different backbones, we also experimented 
 
 *****
 
-### Results
+## Results
 
 As shown in the table above the model architecture which gave us the best results was with output_stride = 16, batch_size = 10 with a learning rate of 0.007 while fine-tuning the backbone and 0.07 for all the remaining layers. We trained the model only until 60 rounds as the model reaches saturation stage and the validation accuracy does not improve post that. At each round, the model was trained for 2 epochs locally by all four clients. The results for the best performing federated architecture for our model are as shown in the graph below.
 
@@ -79,30 +83,33 @@ Below are the results of the visualization:
 
 *****
 
-### Challenges
+## Challenges
 
 We identify three major challenges for using the above mentioned segmentation method in a real world setting:
     
 1. Computational Complexity:
 Since image segmentation is a computationally expensive task, hence edge devices with resource constraint will always face challenges for our method. There are few ways to reduce the computational complexity for e.g reducing the complexity of training by freezing the backbone or keeping a higher output_stride but all of that will come at the cost of losing some accuracy. So, there is again a tradeoff to make between accuracy and computational complexity.
+
 2. Statistical Heterogeneity:
 Since devices frequently generate and collect data in a non-identically distributed manner across the network, hence the number of data points across edge devices may vary significantly and this data generation paradigm violates frequently-used independent and identically distributed (I.I.D) assumptions in distributed optimization. To mitigate this problem, the recommended approach is to simulate the non-IID setting as closely as possible while training the model so the model learns to generalize and adapts to this nature of data generation.
+
 3. Privacy Concerns:
-Even though the entire concept of federated learning is to protect the privacy of data, privacy is still a major concern in federated learning applications including image segmentation. Even though federated learning makes a step towards protecting data generated on each device by sharing model updates, e.g, gradient information, instead of raw data. However, communicating model updates throughout the training process can still reveal sensitive information either to a third-party or to the central server. From the shift in gradient at each state, there are some statistical ways to infer a good amount of information about the data points that are supposed to be private. While recent methods aim to enhance the privacy of federated learning using tools such as multipart computation or differential privacy, these approaches often provide privacy at the cost of reduced model performance or system efficiency. Hence there is a need to understand and balance these tradeoffs while using a federated segmentation approach.
+Even though the entire concept of federated learning is to protect the privacy of data, privacy is still a major concern in federated learning applications including image segmentation. Even though federated learning makes a step towards protecting data generated on each device by sharing model updates, e.g, gradient information, instead of raw data. However, communicating model updates throughout the training process can still reveal sensitive information either to a third-party or to the central server. From the shift in gradient at each state, there are some statistical ways to infer a good amount of information about the data points that are supposed to be private. While recent methods aim to enhance the privacy of federated learning using tools such as multipart computation or differential privacy, these approaches often provide privacy at the cost of reduced model performance or system efficiency. Hence there is a need to understand and balance these tradeoffs while using a federated segmentation approach.\
 
 *****
 
-### Future Work
+## Future Work
 
 There are two things that we intend to work on:
 1. Improving accuracy of the model - 
 In addition to hyper parameter tuning, we plan to work on improving the model accuracy by experimenting with lesser output strides. As mentioned above, the reduction of output strides comes at a huge cost of computational complexity. To keep the computational complexity in check, we can freeze the backbone and try experimenting with output stride of 8 or 4. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful. Lastly, pre-training the model on Coco Dataset and fine-tuning it on Pascal can give better results because Pascal has a small dataset which further gets splitted into n number of clients and so there is a good chance for model to overfit when data is splitted amongst more number of clients.
+
 2. Integrating other popular segmentation models - 
 We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet, etc., which have pretrained models resulting in a state of the art accuracy. We already tried employing the Xception Backbone but the results weren’t impressive because of the reasons mentioned earlier. However, with a fully trained Xception, we expect to get similar or better results than Resnet Backbone that we currently have. Moreover, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
 
 *****
 
-### Resources
+## Resources
 
 1. https://fedml.ai/
 2. https://arxiv.org/abs/2007.13518
