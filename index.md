@@ -28,6 +28,7 @@ This agreement of letting developers train the segmentation model on data they c
 <!-- ![Image](pictures/anim2.gif) -->
 {% include image.html url="pictures/anim2.gif" description="Animation of FedSegment" %}{: id="anim2"}
 
+*****
 
 ### Approach
 
@@ -39,6 +40,7 @@ The Dirichlet distribution, parameterized by the concentration parameter 𝛼, i
 
 We have 5 worker threads out of which 4 are client-threads managed by their Client Managers and a server thread managed by a Server Manager. Client Managers execute the training process in the order that they receive weights from the Server Manager. In the first round, the Server Manager initializes the model and sends the weights to the Client Manager for each client. The Client Manager then sets up the client worker threads on their respective GPUs for training. Since we are training our architecture on 4 GPUs, each client is assigned one GPU. After completing the specified number of epochs, The Client Managers then send the trained weights to the Server Manager. The Server Manager instantiates the server thread to perform aggregation on model weights received from all the clients by scaling the weights with respect to the size of their local dataset. It then updates the model parameters, performs evaluation on the validation set and sends back the updated model weights to the Client Managers. The next round begins and the process continues for a given number of rounds. We employ the MPI communication protocol for the interactions between the server and its clients. 
 
+*****
 
 ### Implementation
 
@@ -49,6 +51,7 @@ We perform image segmentation by training the Deeplabv3+ model with ResNet-101 a
 
 We build a segmentation model on top of the open source FedML framework by training the Deeplabv3+ - Resnet 101 model on the PASCAL VOC dataset comprising 10582 augmented training images and 2857 validation images. The centralized training of Deeplabv3+ in the research paper is our reference baseline model which gives a mean Intersection-over-Union (mIoU) of 78.85%. We have achieved an mIoU of 75.57% in the federated setting. Assuming we have 4 virtual clients, we use 4 GPUs where we assign each client one GPU. By conducting several experiments, we have determined the following values for the training parameters to achieve good results: Batch Size: 10, output stride: 16, learning rate: 0.007, optimizer: SGD. We train the model for 60 rounds with 2 epochs per round. We have also enabled a functionality to save checkpoints of the best validation prediction of mIoU by implementing a saver module.    
 
+*****
 
 ### Experiments
 
@@ -62,6 +65,7 @@ In addition to experimenting with two different backbones, we also experimented 
 | ResNet-101 | 10 | 2 | 60 | 0.007 | 0.924 | 0.0024 | 0.755 | 0.863 | 
 | Xception | 6 | 2 | 60 | 0.007 | 0.6445 | 0.0195 | 0.048 | 0.419 | 
 
+*****
 
 ### Results
 
@@ -71,6 +75,8 @@ As shown in the table above the model architecture which gave us the best result
 {% include image.html url="pictures/finl_graphs.png" description="Final Graphs" %}{: id="final-graphs"}
 
 {% include image.html url="pictures/final_inference_visualization.png" description="Final Visualization" %}{: id="final-visualization"}
+
+*****
 
 ### Challenges
 
@@ -83,6 +89,7 @@ Since devices frequently generate and collect data in a non-identically distribu
 3. Privacy Concerns:
 Even though the entire concept of federated learning is to protect the privacy of data, privacy is still a major concern in federated learning applications including image segmentation. Even though federated learning makes a step towards protecting data generated on each device by sharing model updates, e.g, gradient information, instead of raw data. However, communicating model updates throughout the training process can still reveal sensitive information either to a third-party or to the central server. From the shift in gradient at each state, there are some statistical ways to infer a good amount of information about the data points that are supposed to be private. While recent methods aim to enhance the privacy of federated learning using tools such as multipart computation or differential privacy, these approaches often provide privacy at the cost of reduced model performance or system efficiency. Hence there is a need to understand and balance these tradeoffs while using a federated segmentation approach.
 
+*****
 
 ### Future Work
 
@@ -91,6 +98,8 @@ There are two things that we intend to work on:
 In addition to hyper parameter tuning, we plan to work on improving the model accuracy by experimenting with lesser output strides. As mentioned above, the reduction of output strides comes at a huge cost of computational complexity. To keep the computational complexity in check, we can freeze the backbone and try experimenting with output stride of 8 or 4. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful. Lastly, pre-training the model on Coco Dataset and fine-tuning it on Pascal can give better results because Pascal has a small dataset which further gets splitted into n number of clients and so there is a good chance for model to overfit when data is splitted amongst more number of clients.
 2. Integrating other popular segmentation models - 
 We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet, etc., which have pretrained models resulting in a state of the art accuracy. We already tried employing the Xception Backbone but the results weren’t impressive because of the reasons mentioned earlier. However, with a fully trained Xception, we expect to get similar or better results than Resnet Backbone that we currently have. Moreover, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
+
+*****
 
 ### Resources
 
