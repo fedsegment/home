@@ -23,7 +23,9 @@ Thus, the real problem lies in agglomerating all the information in a central lo
 - The model’s updated parameters are shared with the participants once again, as they continue their local training. 
 
 
-This agreement of letting developers train the segmentation model on data they cannot have access to is the framework we have built and termed as FedSegment. 
+This agreement of letting developers train the segmentation model on data they cannot have access to is the framework we have built and termed as FedSegment. Image segmentation has
+never been studied in Federated Learning up until now and hence there is no easy-to-use framework to enable image segmentation applications. With the help of FedSegment, developers who are not experts in federated learning can conveniently leverage this technology and apply it in their systems for such applications.
+
 
 <!-- ![Image](pictures/anim2.gif) -->
 {% include image.html url="pictures/anim2.gif" description="Animation of FedSegment" %}{: id="anim2"}
