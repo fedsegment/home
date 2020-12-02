@@ -57,7 +57,7 @@ We build a segmentation model on top of the open source FedML framework by train
 
 ## Experiments
 
-We adapt the ImageNet-pretrained backbone to semantic segmentation by applying atrous convolution to extract dense features. We experimented with two backbones: Aligned-Xception and ResNet-101. Motivated by the recent success of depthwise separable convolution, we initially explored our experimentation by adapting Xception backbone [2] for extracting feature maps, and obtained an mIoU of ~10% on the validation dataset after 10 rounds. However the numbers surged when we plugged in the widely used ResNet Backbone. For an equivalent number of rounds, we reported a validation mIoU of ~60%. Even though the Xception backbone is believed to give better results with faster computation[2], our experimentation proved otherwise in this case. After further scrutiny, we figured that the discrepancy was mainly because of the pretrained weights being used. The initial implementation which consisted of a slight modification of Xception backbone called Aligned Xception [5] did not utilize fully pretrained weights, which resulted in poorer metrics. Hence we decided to move forward with the ResNet Backbone for which fully pretrained weights were readily available.
+We adapt the ImageNet-pretrained backbone to semantic segmentation by applying atrous convolution to extract dense features. We experimented with two backbones: Aligned-Xception and ResNet-101. Motivated by the recent success of depthwise separable convolution, we initially explored our experimentation by adapting Xception backbone[3] for extracting feature maps, and obtained an mIoU of ~10% on the validation dataset after 10 rounds. However the numbers surged when we plugged in the widely used ResNet Backbone. For an equivalent number of rounds, we reported a validation mIoU of ~60%. Even though the Xception backbone is believed to give better results with faster computation[3], our experimentation proved otherwise in this case. After further scrutiny, we figured that the discrepancy was mainly because of the pretrained weights being used. The initial implementation which consisted of a slight modification of Xception backbone called Aligned Xception[5] did not utilize fully pretrained weights, which resulted in poorer metrics. Hence we decided to move forward with the ResNet Backbone for which fully pretrained weights were readily available.
 
 In addition to experimenting with two different backbones, we also experimented with different output strides. The output stride is defined as the ratio of input image spatial resolution to final output resolution. For the task of semantic segmentation, one can adopt an output stride of 16 (or 8) for denser feature extraction. Theoretically, lowering the output stride improves the performance marginally, however it adds a lot of extra computational complexity and hence using an output stride of 16 strikes the best trade-off between speed and accuracy. With the limited resources we had, we could only train our models for upto 15 rounds with an output stride of 8 as outlined in the table below. 
 
@@ -100,20 +100,22 @@ Even though the entire concept of federated learning is to protect the privacy o
 
 ## Future Work
 
-There are two things that we intend to work on:
+We intend to work on the following points going forward:
+
 1. Improving accuracy of the model - 
-In addition to hyper parameter tuning, we plan to work on improving the model accuracy by experimenting with lesser output strides. As mentioned above, the reduction of output strides comes at a huge cost of computational complexity. To keep the computational complexity in check, we can freeze the backbone and try experimenting with output stride of 8 or 4. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful. Lastly, pre-training the model on Coco Dataset and fine-tuning it on Pascal can give better results because Pascal has a small dataset which further gets splitted into n number of clients and so there is a good chance for model to overfit when data is splitted amongst more number of clients.
+In addition to hyper-parameter tuning, we plan to work on improving the model accuracy by experimenting with smaller output strides. As mentioned above, the reduction of output strides comes at the cost of computational complexity. To keep the computational complexity in check, we can freeze the backbone and try experimenting with output stride of 8 or 4. Additionally, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may also be helpful. Lastly, pre-training the model on the Coco Dataset and fine-tuning it on Pascal can give better results; Pascal has a small dataset which is further split into N number of clients and there is a good chance for the model to overfit when data is split amongst more number of clients.
 
 2. Integrating other popular segmentation models - 
-We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet, etc., which have pretrained models resulting in a state of the art accuracy. We already tried employing the Xception Backbone but the results weren’t impressive because of the reasons mentioned earlier. However, with a fully trained Xception, we expect to get similar or better results than Resnet Backbone that we currently have. Moreover, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
+We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model such as Xception and MobileNet with fully pretrained models, resulting in state-of-the-art accuracy. While our current approach is limited to using the ResNet backbone, with a better-trained Xception backbone, we expect to get similar or better results. We also plan to extend our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
+
 
 *****
 
 ## Resources
 
-1. https://fedml.ai/
-2. https://arxiv.org/abs/2007.13518
-3. https://arxiv.org/pdf/1802.02611.pdf
-4. https://wandb.ai/elliebababa/fedml/runs/5ykbr3ul
-5. https://github.com/jfzhang95/pytorch-deeplab-xception
+1. [FedML Library](https://fedml.ai/)
+2. [FedML: A Research Library and Benchmark for Federated Machine Learning, Chaoyang He et. al](https://arxiv.org/abs/2007.13518)
+3. [Encoder-Decoder with Atrous SeparableConvolution for Semantic Image Segmentation, Liang-Chieh Chen et. al](https://arxiv.org/pdf/1802.02611.pdf)
+4. [Logs of our experiment (wandb)](https://wandb.ai/elliebababa/fedml/runs/5ykbr3ul)
+5. [Pytorch Deeplab Xception](https://github.com/jfzhang95/pytorch-deeplab-xception)
 
