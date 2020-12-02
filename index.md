@@ -25,6 +25,9 @@ Thus, the real problem lies in agglomerating all the information in a central lo
 
 This agreement of letting developers train the segmentation model on data they cannot have access to is the framework we have built and termed as FedSegment. 
 
+<!-- ![Image](pictures/anim2.gif) -->
+{% include image.html url="pictures/anim2.gif" description="Animation of FedSegment" %}{: id="anim2"}
+
 
 ### Approach
 
@@ -33,10 +36,6 @@ We simulate a federated learning architecture by adapting and training DeepLabV3
 {% include image.html url="pictures/nonIIDGraphComparison.png" description="Non I.I.D comparison with different alpha values (we use alpha=0.5 to achieve good a non-I.I.D distribution)" %}{: id="niid"}
 
 The Dirichlet distribution is a density over a K dimensional vector p whose K components are positive and sum to 1. Dirichlet can support the probabilities of a K-way categorical event. In Federated Learning, we find that the K clients' sample numbers obey the Dirichlet distribution. This Latent Dirichlet Allocation (LDA) method was first proposed by Measuring the Effects of Non-Identical Data Distribution for Federated Visual Classification. This can generate nonIIDness with an unbalanced sample number in each label.
-
-<!-- ![Image](pictures/anim2.gif) -->
-{% include image.html url="pictures/anim2.gif" description="Animation of FedSegment" %}{: id="anim2"}
-
 
 The server sends initial weights of the model to all the clients in the beginning. The clients start training on their own subset of data and send weights to the server. The server gathers the weights from all the clients and performs aggregation on the weights. The aggregated weights are sent back to the clients and the training continues. This entire loop is called one round. Many such rounds are simulated in order to achieve a decent accuracy. 
 
@@ -53,9 +52,9 @@ We build a segmentation model on top of the open source FedML framework by train
 
 ### Experiments
 
-We adapt the ImageNet-pretrained backbone to the semantic segmentation by applying atrous convolution to extract dense features. For extracting feature maps, we experimented with two backbones; Aligned-Xception and ResNet-101. We trained our models with Xception backbone for 10 rounds and got a mIoU ~10% on validation dataset, however with ResNet Backbone for the same number of rounds, we reported validation mIoU ~60%. Even though Xception backbone is believed to be giving better results with faster computation as per [3], that didn’t turn out to be true during our experimentation. After double checking our implementation, we figured out that the problem was with the pretrained weights we were using. For the implementation we followed which is a slight modification of Xception backbone called Aligned Xception [5], the pretrained weights we had were not fully trained. And we could not find fully pretrained weights for the exact implementation. Hence we decided to stick with ResNet Backbone for which we had fully pretrained weights already available.
+We adapt the ImageNet-pretrained backbone to the semantic segmentation by applying atrous convolution to extract dense features. For extracting feature maps, we experimented with two backbones; Aligned-Xception and ResNet-101. Motivated by the recent success of depthwise separable convolution, we first explored our experimentation by adapting Xception backbone [2] for extracting feature maps, and reported a mIoU ~10% on validation dataset after 10 rounds. However these numbers surged up when we plugged in the widely used ResNet Backbone. For the same number of rounds, we reported validation mIoU ~60%. Even though Xception backbone is believed to be giving better results with faster computation as per [2], that didn’t turn out to be true during our experimentation. After double checking our implementation, we figured out that the discrepancy was mainly because of the pretrained weights we were using. For the implementation we followed which is a slight modification of Xception backbone called Aligned Xception [5], the pretrained weights we had were not fully trained. And we could not find fully pretrained weights for the exact implementation. Hence we decided to stick with ResNet Backbone for which we had fully pretrained weights already available.
 
-In addition to experimenting with different backbones, we also experimented with different output stride. The output stride is defined as the ratio of input image spatial resolution to final output resolution.
+In addition to experimenting with two different backbones, we also experimented with different output strides. The output stride is defined as the ratio of input image spatial resolution to final output resolution. For the task of semantic segmentation, one can adopt output stride = 16 (or 8) for denser feature extraction. Theoretically, lowering the output stride improves the performance marginally, however it adds a lot of extra computational complexity and hence using output stride = 16 strikes the best trade-off between speed and accuracy. With the limited resources we had, we could not only train our models upto round 15 for output stride = 8 as reported in the table below. 
 
 
 ### Results
@@ -72,10 +71,11 @@ In addition to experimenting with different backbones, we also experimented with
 
 ### Future Work
 
-There are two things that we can work on:
- - Improving accuracy of the model - In addition to hyper parameter tuning, we can further try to improve on accuracy by experimenting with other aggregation methods e.g, FedMA instead of FedAvg. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful
-
-- Integrating other popular segmentation models - We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet which have pretrained models resulting in SOTA accuracy. Currently, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
+There are two things that we intend to work on:
+1. Improving accuracy of the model - 
+In addition to hyper parameter tuning, we plan to work on improving the model accuracy by experimenting with other aggregation methods e.g, FedMA instead of FedAvg. Also, plugging a better loss function (Dice + Focal Loss) instead of Cross-Entropy Loss may be helpful
+2. Integrating other popular segmentation models - 
+We also intend to explore and incorporate alternate backbones to train the DeepLabV3+ model - such as Xception, MobileNet, etc., which have pretrained models resulting in a state of the art accuracy. Currently, our approach is limited to using the ResNet backbone. We also plan on extending our current work and encompass additional segmentation models such as EfficientFCN or BlendMask under the FedSegment umbrella.
 
 
 ### Resources
