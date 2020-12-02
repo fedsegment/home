@@ -75,11 +75,11 @@ In addition to experimenting with two different backbones, we also experimented 
 As shown in the table above the model architecture which gave us the best results was with output_stride = 16, batch_size = 10 with a learning rate of 0.007 while fine-tuning the backbone and 0.07 for all the remaining layers. We trained the model only until 60 rounds as the model reaches saturation stage and the validation accuracy does not improve post that. At each round, the model was trained for 2 epochs locally by all four clients. The results for the best performing federated architecture for our model are as shown in the graph below.
 
 <!-- ![Image](pictures/finl_graphs.png) -->
-{% include image.html url="pictures/finl_graphs.png" description="Final Graphs" %}{: id="final-graphs"}
+{% include image.html url="pictures/finl_graphs.png" description="Resulting graphs for ResNet-101 as backbone with batch_size = 10 and number of rounds = 60" %}{: id="final-graphs"}
 
 Below are the results of the visualization:
 
-{% include image.html url="pictures/final_inference_visualization.png" description="Final Visualization" %}{: id="final-visualization"}
+{% include image.html url="pictures/final_inference_visualization.png" description="Resulting visualizations for ResNet-101 as backbone with batch_size = 10 and number of rounds = 60" %}{: id="final-visualization"}
 
 *****
 
@@ -94,7 +94,7 @@ Since image segmentation is a computationally expensive task, hence edge devices
 Since devices frequently generate and collect data in a non-identically distributed manner across the network, hence the number of data points across edge devices may vary significantly and this data generation paradigm violates frequently-used independent and identically distributed (I.I.D) assumptions in distributed optimization. To mitigate this problem, the recommended approach is to simulate the non-IID setting as closely as possible while training the model so the model learns to generalize and adapts to this nature of data generation.
 
 3. Privacy Concerns:
-Even though the entire concept of federated learning is to protect the privacy of data, privacy is still a major concern in federated learning applications including image segmentation. Even though federated learning makes a step towards protecting data generated on each device by sharing model updates, e.g, gradient information, instead of raw data. However, communicating model updates throughout the training process can still reveal sensitive information either to a third-party or to the central server. From the shift in gradient at each state, there are some statistical ways to infer a good amount of information about the data points that are supposed to be private. While recent methods aim to enhance the privacy of federated learning using tools such as multipart computation or differential privacy, these approaches often provide privacy at the cost of reduced model performance or system efficiency. Hence there is a need to understand and balance these tradeoffs while using a federated segmentation approach.\
+Even though the entire concept of federated learning is to protect the privacy of data, privacy is still a major concern in federated learning applications including image segmentation. Even though federated learning makes a step towards protecting data generated on each device by sharing model updates, e.g, gradient information, instead of raw data. However, communicating model updates throughout the training process can still reveal sensitive information either to a third-party or to the central server. From the shift in gradient at each state, there are some statistical ways to infer a good amount of information about the data points that are supposed to be private. While recent methods aim to enhance the privacy of federated learning using tools such as multipart computation or differential privacy, these approaches often provide privacy at the cost of reduced model performance or system efficiency. Hence there is a need to understand and balance these tradeoffs while using a federated segmentation approach.
 
 *****
 
